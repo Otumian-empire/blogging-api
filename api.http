@@ -1,0 +1,98 @@
+# Blogging Api
+
+## constants
+@baseUrl=http://localhost:3000/api/v1
+@jwt=hello
+
+
+## Auth
+
+### Sign up
+POST {{baseUrl}}/auth/registration
+Content-Type: application/json
+
+{
+    "username": "martin",
+    "email": "martin@gmail.com",
+    "password": "Tiny1234$"
+}
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "martin@gmail.com",
+    "password": "Tiny1234$"
+}
+
+### List users
+GET {{baseUrl}}/auth/users/
+
+
+### Get a user by id
+GET {{baseUrl}}/auth/users/1
+
+
+## Blog
+
+### Create blog
+POST {{baseUrl}}/blogs
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+{
+    "title": "How Javascript doesn't work",
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi elementum tempus nisi id rhoncus. In dictum metus at turpis ultrices, in maximus ligula pulvinar. Cras convallis eu augue sit amet egestas. Morbi at odio porta, condimentum tortor dignissim, placerat quam. Maecenas in augue ultrices, viverra sem sit amet, placerat eros. Phasellus varius libero in diam euismod, dictum gravida libero accumsan. Phasellus porttitor id leo facilisis hendrerit. Pellentesque consectetur quam elit, sit amet blandit tortor suscipit at. Sed risus nibh, convallis non justo vitae, finibus pellentesque nisl. Pellentesque non justo ac nibh posuere placerat. Sed in sodales diam. Vestibulum sollicitudin pharetra condimentum. Fusce vulputate suscipit lectus ac tincidunt."
+}
+
+### List blogs
+GET {{baseUrl}}/blogs
+Content-Type: application/json
+
+### Get a blog
+GET {{baseUrl}}/blogs/1
+
+### Update a blog
+PUT {{baseUrl}}/blogs/1
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+{
+    "title": "How Javascript doesn't work",
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi elementum tempus nisi id rhoncus. In dictum metus at turpis ultrices, in maximus ligula pulvinar. Cras convallis eu augue sit amet egestas. Morbi at odio porta, condimentum tortor dignissim, placerat quam. Maecenas in augue ultrices, viverra sem sit amet, placerat eros. Phasellus varius libero in diam euismod, dictum gravida libero accumsan. Phasellus porttitor id leo facilisis hendrerit. Pellentesque consectetur quam elit, sit amet blandit tortor suscipit at. Sed risus nibh, convallis non justo vitae, finibus pellentesque nisl. Pellentesque non justo ac nibh posuere placerat. Sed in sodales diam. Vestibulum sollicitudin pharetra condimentum. Fusce vulputate suscipit lectus ac tincidunt."
+}
+
+### Delete a blog
+DELETE {{baseUrl}}/blogs/1
+Authorization: Bearer {{jwt}}
+
+
+## Comment
+
+### Create comment
+POST {{baseUrl}}/comments/1
+Authorization: Bearer {{jwt}}
+
+{
+    "content": "sit amet blandit tortor suscipit at"
+}
+
+### List comments
+GET {{baseUrl}}/comments/1
+Authorization: Bearer {{jwt}}
+
+### Get a comment
+
+### Update a comment
+PUT {{baseUrl}}/comments/1/1
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+{
+    "content": "sit amet blandit tortor suscipit at"
+}
+
+### Delete a comment
+PUT {{baseUrl}}/comments/1/1
+Authorization: Bearer {{jwt}}
