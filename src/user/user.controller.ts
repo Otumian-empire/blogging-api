@@ -35,8 +35,8 @@ export class UserController {
 
   @Post('/login')
   async login(@Body() loginUserDto: LoginUserDto) {
-    const userCreated = await this.userService.login(loginUserDto);
-    if (!userCreated) {
+    const user = await this.userService.login(loginUserDto);
+    if (!user) {
       return {
         status: false,
         message: 'Invalid credentials, please try again'
@@ -46,10 +46,7 @@ export class UserController {
     return {
       success: true,
       message: 'User login successful',
-      data: {
-        email: userCreated.email,
-        username: userCreated.username
-      }
+      data: user
     };
   }
 

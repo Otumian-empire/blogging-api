@@ -4,12 +4,14 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { User } from 'src/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import PasswordUtil from './password.util';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>
+    private userRepository: Repository<User>,
+    private passwordUtil: PasswordUtil
   ) {}
 
   async isExitingEmail(email: string) {
@@ -23,23 +25,37 @@ export class UserService {
       throw new BadRequestException('Email already exists');
     }
 
+    const hash = await this.passwordUtil.hash(createUserDto.password);
+
+    createUserDto = { ...createUserDto, password: hash };
+
     return await this.userRepository.save(createUserDto);
   }
 
   async login(loginUserDto: LoginUserDto) {
     // hash the password before insert
-    return await this.userRepository.findOne({
-      where: loginUserDto
+    const user = await this.userRepository.findOne({
+      where: { email: loginUserDto.email }
     });
+    if (!user) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
+    const isValid = await this.passwordUtil.verify(
+      loginUserDto.password,
+      user.password
+    );
+    if (!isValid) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
+    return user.toSafe();
   }
 
   async findAll() {
     const [users, count] = await this.userRepository.findAndCount();
     return {
-      rows: users.map((user) => ({
-        ...user,
-        password: undefined
-      })),
+      rows: users.map((user) => user.toSafe()),
       count
     };
   }
@@ -50,10 +66,7 @@ export class UserService {
       throw new BadRequestException(`User with id, ${id}, not found`);
     }
 
-    return {
-      ...user,
-      password: undefined
-    };
+    return user.toSafe();
   }
 
   // update(id: number, updateUserDto: UpdateUserDto) {

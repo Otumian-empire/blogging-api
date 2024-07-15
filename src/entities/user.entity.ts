@@ -25,4 +25,11 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  toSafe() {
+    return {
+      ...this,
+      password: undefined
+    };
+  }
 }
