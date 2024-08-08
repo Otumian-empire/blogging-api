@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BlogModule } from './blog/blog.module';
 import { Blog, User } from './entities/';
 import { UserModule } from './user/user.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { UserModule } from './user/user.module';
       entities: [Blog, User]
     }),
     BlogModule,
-    UserModule
+    UserModule,
+    CommonModule
   ],
   controllers: [],
   providers: []
