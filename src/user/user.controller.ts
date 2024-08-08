@@ -1,16 +1,16 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
   // Patch,
   Param,
-  Delete,
-  HttpCode
+  Post,
+  UseInterceptors
 } from '@nestjs/common';
+import { CreateUserDto, LoginResponseDto, LoginUserDto } from './dto';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('/api/v1/auth')
 export class UserController {
@@ -33,24 +33,10 @@ export class UserController {
     };
   }
 
+  @UseInterceptors(LoginResponseDto)
   @Post('/login')
   async login(@Body() loginUserDto: LoginUserDto) {
-    const userCreated = await this.userService.login(loginUserDto);
-    if (!userCreated) {
-      return {
-        status: false,
-        message: 'Invalid credentials, please try again'
-      };
-    }
-
-    return {
-      success: true,
-      message: 'User login successful',
-      data: {
-        email: userCreated.email,
-        username: userCreated.username
-      }
-    };
+    return this.userService.login(loginUserDto);
   }
 
   @Get('/users')

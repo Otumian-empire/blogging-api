@@ -1,19 +1,24 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/entities';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { User } from 'src/entities';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { UserUtil } from './user.utils';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>
+    private userRepository: Repository<User>,
+    private userUtil: UserUtil
   ) {}
 
-  async isExitingEmail(email: string) {
-    const user = await this.userRepository.findOne({ where: { email } });
+  private async isExitingEmail(email: string) {
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: ['id']
+    });
     return !!user;
   }
 
@@ -23,14 +28,35 @@ export class UserService {
       throw new BadRequestException('Email already exists');
     }
 
+    createUserDto.email = createUserDto.email.toLowerCase();
+    createUserDto.password = await this.userUtil.hashPassword(
+      createUserDto.password
+    );
+
     return await this.userRepository.save(createUserDto);
   }
 
   async login(loginUserDto: LoginUserDto) {
-    // hash the password before insert
-    return await this.userRepository.findOne({
-      where: loginUserDto
+    const user = await this.userRepository.findOne({
+      where: { email: loginUserDto.email },
+      select: ['id', 'password', 'email', 'username', 'createAt', 'updatedAt']
     });
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const isAuthentic = await this.userUtil.comparePassword(
+      loginUserDto.password,
+      user.password
+    );
+    if (!isAuthentic) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
+    const token = await this.userUtil.generateJwt(user);
+
+    delete user.password;
+    return { ...user, token };
   }
 
   async findAll() {
@@ -45,15 +71,15 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({
+      where: { id },
+      select: { password: false }
+    });
     if (!user) {
       throw new BadRequestException(`User with id, ${id}, not found`);
     }
 
-    return {
-      ...user,
-      password: undefined
-    };
+    return user;
   }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
