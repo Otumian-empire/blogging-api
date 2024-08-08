@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { BlogModule } from './blog/blog.module';
-import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Blog } from './entities/blog.entity';
-import { User } from './entities/user.entity';
+import { BlogModule } from './blog/blog.module';
+import { Blog, User } from './entities/';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
