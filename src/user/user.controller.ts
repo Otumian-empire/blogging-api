@@ -6,12 +6,18 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+<<<<<<< HEAD
   ParseIntPipe,
+=======
+>>>>>>> ad474b1 (add update user)
   Patch,
   Post,
   UseInterceptors
 } from '@nestjs/common';
+<<<<<<< HEAD
 import { IdValidation } from 'src/common/validation';
+=======
+>>>>>>> ad474b1 (add update user)
 import {
   CreateUserDto,
   LoginResponseDto,
@@ -66,18 +72,26 @@ export class UserController {
   }
 
   @Get('/users/:id')
+<<<<<<< HEAD
   findOne(
     @Param('id', /* ParseIntPipe, */ /* new IdValidation() */ IdValidation)
     id: number
   ) {
+=======
+  findOne(@Param('id') id: number) {
+>>>>>>> ad474b1 (add update user)
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
+<<<<<<< HEAD
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto
   ) {
+=======
+  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+>>>>>>> ad474b1 (add update user)
     return this.userService.update(id, updateUserDto);
   }
 

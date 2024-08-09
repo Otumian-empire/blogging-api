@@ -3,11 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities';
 import { Repository } from 'typeorm';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
 =======
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 >>>>>>> 70c37cc (reimplement the login and sign up, hashing the user password and generating jwt)
+=======
+import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
+>>>>>>> ad474b1 (add update user)
 import { UserUtil } from './user.utils';
 
 @Injectable()
