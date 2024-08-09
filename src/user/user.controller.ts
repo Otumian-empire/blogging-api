@@ -7,9 +7,13 @@ import {
   HttpStatus,
   Param,
 <<<<<<< HEAD
+<<<<<<< HEAD
   ParseIntPipe,
 =======
 >>>>>>> ad474b1 (add update user)
+=======
+  ParseIntPipe,
+>>>>>>> 560c792 (submain)
   Patch,
   Post,
   UseInterceptors
@@ -25,6 +29,7 @@ import {
   UpdateUserDto
 } from './dto';
 import { UserService } from './user.service';
+import { IdValidation } from 'src/common/validation';
 
 @Controller('/api/v1/auth')
 export class UserController {
@@ -73,25 +78,37 @@ export class UserController {
 
   @Get('/users/:id')
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 560c792 (submain)
   findOne(
     @Param('id', /* ParseIntPipe, */ /* new IdValidation() */ IdValidation)
     id: number
   ) {
+<<<<<<< HEAD
 =======
   findOne(@Param('id') id: number) {
 >>>>>>> ad474b1 (add update user)
+=======
+>>>>>>> 560c792 (submain)
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 560c792 (submain)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto
   ) {
+<<<<<<< HEAD
 =======
   update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
 >>>>>>> ad474b1 (add update user)
+=======
+>>>>>>> 560c792 (submain)
     return this.userService.update(id, updateUserDto);
   }
 
