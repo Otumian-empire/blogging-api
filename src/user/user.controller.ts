@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UseInterceptors
@@ -17,6 +18,7 @@ import {
   UpdateUserDto
 } from './dto';
 import { UserService } from './user.service';
+import { IdValidation } from 'src/common/validation';
 
 @Controller('/api/v1/auth')
 export class UserController {
@@ -52,17 +54,23 @@ export class UserController {
   }
 
   @Get('/users/:id')
-  findOne(@Param('id') id: number) {
+  findOne(
+    @Param('id', /* ParseIntPipe, */ /* new IdValidation() */ IdValidation)
+    id: number
+  ) {
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto
+  ) {
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.userService.remove(+id);
   }
 }
