@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+<<<<<<< HEAD
   HttpStatus,
   Param,
   Patch,
@@ -16,6 +17,14 @@ import {
   LoginUserDto,
   UpdateUserDto
 } from './dto';
+=======
+  // Patch,
+  Param,
+  Post,
+  UseInterceptors
+} from '@nestjs/common';
+import { CreateUserDto, LoginResponseDto, LoginUserDto } from './dto';
+>>>>>>> 70c37cc (reimplement the login and sign up, hashing the user password and generating jwt)
 import { UserService } from './user.service';
 
 @Controller('/api/v1/auth')
@@ -40,6 +49,7 @@ export class UserController {
   }
 
   @UseInterceptors(LoginResponseDto)
+<<<<<<< HEAD
   @HttpCode(HttpStatus.OK)
   @Post('/login')
   async login(@Body() loginUserDto: LoginUserDto) {
@@ -56,6 +66,11 @@ export class UserController {
       message: 'User login successful',
       data: user
     };
+=======
+  @Post('/login')
+  async login(@Body() loginUserDto: LoginUserDto) {
+    return this.userService.login(loginUserDto);
+>>>>>>> 70c37cc (reimplement the login and sign up, hashing the user password and generating jwt)
   }
 
   @Get('/users')
