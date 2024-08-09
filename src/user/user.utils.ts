@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { AppConstant } from 'src/common/constants/app.constant';
 
 @Injectable()
 export class UserUtil {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private constants: AppConstant
+  ) {}
 
   async hashPassword(plainText: string) {
-    return await bcrypt.hash(plainText, 10);
+    return await bcrypt.hash(plainText, this.constants.salt);
   }
 
   async comparePassword(plainText: string, passwordHash: string) {
@@ -24,8 +28,6 @@ export class UserUtil {
       issuer: 'me',
       secret: 'secret'
     });
-
-    console.log(payload);
 
     return payload;
   }

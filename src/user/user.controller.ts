@@ -6,10 +6,12 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UseInterceptors
 } from '@nestjs/common';
+import { IdValidation } from 'src/common/validation';
 import {
   CreateUserDto,
   LoginResponseDto,
@@ -43,19 +45,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Post('/login')
   async login(@Body() loginUserDto: LoginUserDto) {
-    const user = await this.userService.login(loginUserDto);
-    if (!user) {
-      return {
-        status: false,
-        message: 'Invalid credentials, please try again'
-      };
-    }
-
-    return {
-      success: true,
-      message: 'User login successful',
-      data: user
-    };
+    return this.userService.login(loginUserDto);
   }
 
   @Get('/users')
@@ -64,17 +54,23 @@ export class UserController {
   }
 
   @Get('/users/:id')
-  findOne(@Param('id') id: number) {
+  findOne(
+    @Param('id', /* ParseIntPipe, */ /* new IdValidation() */ IdValidation)
+    id: number
+  ) {
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto
+  ) {
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.userService.remove(+id);
   }
 }
